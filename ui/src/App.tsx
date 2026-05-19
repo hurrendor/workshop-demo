@@ -5,6 +5,8 @@ import { renderSignupUrlWithUtms } from './lib/renderSignup'
 
 const GITHUB_REPO = 'https://github.com/ojusave/workshop-demo'
 const DEPLOY_URL = `https://render.com/deploy?repo=${GITHUB_REPO}`
+declare const __BUILD_ID__: string
+const BUILD_ID = typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'dev'
 
 type SearchSlot = {
   status: 'idle' | 'running' | 'success' | 'failed' | 'aborted'
@@ -58,7 +60,7 @@ type ResearchEvent = {
   error?: string
   memo?: string
   message?: string
-  text?: string
+  delta?: string
 }
 
 function useResearchStream(
@@ -183,9 +185,9 @@ export default function App() {
         return next
       }
 
-      if (event.type === 'synthesis:chunk' && event.text) {
+      if (event.type === 'synthesis:chunk' && event.delta) {
         next.status = 'synthesizing'
-        next.memoDraft = event.text
+        next.memoDraft = (prev.memoDraft ?? '') + event.delta
         return next
       }
 
@@ -330,7 +332,10 @@ export default function App() {
 
       <footer className="shrink-0 border-t border-white/10 bg-[#0a0a0a]">
         <div className="mx-auto flex max-w-[960px] flex-wrap items-center justify-between gap-4 px-6 py-5 text-sm text-white/60">
-          <span>Built for CascadiaJS 2026 workshop on Render Workflows</span>
+          <span>
+            Built for CascadiaJS 2026 workshop on Render Workflows
+            <span className="ml-2 font-mono text-xs text-white/40">build {BUILD_ID}</span>
+          </span>
           <div className="flex flex-wrap items-center gap-4">
           <a
             href={GITHUB_REPO}

@@ -6,7 +6,7 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 type SynthesisProgress = {
   message?: string
-  text?: string
+  delta?: string
 }
 
 export async function synthesize(
@@ -91,7 +91,7 @@ ${sources}`
       event.delta.type === 'text_delta'
     ) {
       text += event.delta.text
-      onProgress?.({ text })
+      onProgress?.({ delta: event.delta.text })
     }
   }
 

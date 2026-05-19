@@ -31,7 +31,7 @@ export async function research(
   onEvent({ type: 'synthesizing', message: 'All searches complete. Starting synthesis…' })
   const memo = await synthesize(query, results, (update) => {
     if (update.message) onEvent({ type: 'synthesizing', message: update.message })
-    if (update.text) onEvent({ type: 'synthesis:chunk', text: update.text })
+    if (update.delta) onEvent({ type: 'synthesis:chunk', delta: update.delta })
   })
   onEvent({ type: 'done', memo })
   return memo

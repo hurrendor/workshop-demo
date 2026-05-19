@@ -36,6 +36,8 @@ app.get('/api/research/:runId/events', async (req, res) => {
 
   const sub = subscribeToRun(req.params.runId, (event) => {
     res.write(`data: ${JSON.stringify(event)}\n\n`)
+    const flush = (res as unknown as { flush?: () => void }).flush
+    if (typeof flush === 'function') flush()
   })
 
   if (!sub) {
@@ -48,9 +50,19 @@ app.get('/api/research/:runId/events', async (req, res) => {
   res.end()
 })
 
-app.use(express.static(path.join(__dirname, '../../ui/dist')))
+const uiDist = path.join(__dirname, '../../ui/dist')
+app.use(
+  express.static(uiDist, {
+    setHeaders(res, filePath) {
+      if (filePath.endsWith('index.html')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+      }
+    },
+  })
+)
 app.get('*', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../../ui/dist/index.html'))
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+  res.sendFile(path.join(uiDist, 'index.html'))
 })
 
 const port = parseInt(process.env.PORT ?? '3000', 10)
