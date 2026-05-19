@@ -178,8 +178,8 @@ export default function App() {
 
   async function startResearch() {
     const symbol = ticker.toUpperCase()
-    if (!/^[A-Z]{1,5}$/.test(symbol)) {
-      setValidationError('Enter a valid ticker (1 to 5 letters)')
+    if (!/^[A-Z]{1,10}$/.test(symbol)) {
+      setValidationError('Enter a valid ticker (1 to 10 letters)')
       return
     }
     setValidationError(null)
@@ -231,7 +231,7 @@ export default function App() {
               type="text"
               value={ticker}
               onChange={(e) => {
-                const v = e.target.value.replace(/[^a-zA-Z]/g, '').slice(0, 5)
+                const v = e.target.value.replace(/[^a-zA-Z]/g, '').slice(0, 10)
                 setTicker(v.toUpperCase())
               }}
               placeholder="AAPL"

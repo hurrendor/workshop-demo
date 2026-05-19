@@ -14,8 +14,8 @@ app.get('/healthz', (_req, res) => res.send('ok'))
 
 app.post('/api/research', (req, res) => {
   const ticker = (req.body?.ticker ?? '').toUpperCase()
-  if (!/^[A-Z]{1,5}$/.test(ticker)) {
-    return res.status(400).json({ error: 'Enter a valid ticker (1 to 5 letters)' })
+  if (!/^[A-Z]{1,10}$/.test(ticker)) {
+    return res.status(400).json({ error: 'Enter a valid ticker (1 to 10 letters)' })
   }
   const runId = startResearch(ticker)
   res.json({ runId })
