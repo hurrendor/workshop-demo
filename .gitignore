@@ -7,3 +7,4 @@ tasks/dist/
 server/dist/
 shared/types.js
 shared/types.d.ts
+.idea/
